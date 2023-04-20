@@ -1,0 +1,16 @@
+App As appinfo:
+    BackEnabled: =false
+    OnStart: |-
+        =ClearCollect(
+          ProductItems,
+          {
+            ID: "",
+            Qty: 0,
+            ItemNumber: 0,
+            Description: "",
+            UnitPrice: 0,
+            Discount: 0,
+            LineTotal: 0
+          }
+        );
+

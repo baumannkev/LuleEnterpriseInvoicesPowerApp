@@ -1,0 +1,7 @@
+{
+  "DataEntityMetadataJson": {
+    "{8BA2FA45-CB22-440F-B04E-4829A61B8CD4}": "{\"name\":\"{8BA2FA45-CB22-440F-B04E-4829A61B8CD4}\",\"title\":\"PaymentMethods\",\"x-ms-permission\":\"read-write\",\"x-ms-capabilities\":{\"sortRestrictions\":{\"sortable\":true},\"filterRestrictions\":{\"filterable\":true},\"filterFunctionSupport\":[\"eq\",\"ne\",\"substringof\",\"contains\",\"startswith\",\"endswith\"]},\"schema\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"Payment Methods\":{\"type\":\"string\",\"title\":\"Payment Methods\",\"x-ms-sort\":\"none\",\"x-ms-capabilities\":{\"filterFunctions\":[\"eq\",\"ne\",\"substringof\",\"contains\",\"startswith\",\"endswith\"]},\"x-ms-permission\":\"read-write\"},\"__PowerAppsId__\":{\"type\":\"string\",\"title\":\"__PowerAppsId__\",\"x-ms-sort\":\"none\",\"x-ms-capabilities\":{\"filterFunctions\":[\"eq\",\"ne\",\"substringof\",\"contains\",\"startswith\",\"endswith\"]},\"x-ms-keyOrder\":1,\"x-ms-keyType\":\"primary\",\"x-ms-permission\":\"read-only\"}}}}}"
+  },
+  "EntityName": "PaymentMethods",
+  "TableName": "{8BA2FA45-CB22-440F-B04E-4829A61B8CD4}"
+}

@@ -1,0 +1,1116 @@
+NewInvoice As screen:
+    Fill: |
+        =
+    OnVisible: =Clear(ProductItemsCollection)
+
+    Label17 As label:
+        Align: =Align.Center
+        Fill: =RGBA(0, 134, 208, 1)
+        Height: =60
+        Size: =30
+        Text: ="Lule Enterprise Invoice"
+        Width: =768
+        ZIndex: =1
+
+    Label18 As label:
+        Text: |-
+            ="Invoice #"
+        X: =618
+        Y: =80
+        ZIndex: =2
+
+    Label2_8 As label:
+        Text: |-
+            ="Sold to:"
+        VerticalAlign: =VerticalAlign.Top
+        X: =30
+        Y: =80
+        ZIndex: =4
+
+    Container2_2 As groupContainer.horizontalAutoLayoutContainer:
+        Height: =139
+        LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+        LayoutMode: =LayoutMode.Auto
+        Width: =768
+        Y: =140
+        ZIndex: =6
+
+        Label2_9 As label:
+            Text: ="Payment Method"
+            ZIndex: =1
+
+    PaymentMethod As dropdown:
+        Items: =PaymentMethods
+        X: =192
+        Y: =141
+        ZIndex: =7
+
+    Label2_10 As label:
+        Text: ="Qty"
+        X: =92
+        Y: =198
+        ZIndex: =10
+
+    Label3_7 As label:
+        Text: |-
+            ="Item #"
+        X: =199
+        Y: =198
+        ZIndex: =11
+
+    Label3_8 As label:
+        Text: ="Description"
+        X: =348
+        Y: =198
+        ZIndex: =12
+
+    Label4_2 As label:
+        Text: ="Unit Price"
+        X: =618
+        Y: =198
+        ZIndex: =13
+
+    Label5_5 As label:
+        Text: ="Discount"
+        X: =618
+        Y: =198
+        ZIndex: =14
+
+    Label6_2 As label:
+        Text: ="Line Total"
+        X: =618
+        Y: =198
+        ZIndex: =15
+
+    "Gallery2 As gallery.'BrowseLayout_Flexible_SocialFeed_ver4.0'":
+        DelayItemLoading: =true
+        Height: =92
+        Items: =ProductItems
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        OnSelect: =
+        TabIndex: =1
+        TemplatePadding: =4
+        TemplateSize: =132
+        Visible: =false
+        Width: =100
+        Y: =256
+        ZIndex: =16
+
+        TextInputQty As text:
+            Default: =""
+            Format: =TextFormat.Number
+            HintText: ="0"
+            OnChange: |
+                =Select(Parent);
+                If(
+                    ThisItem.ID in ProductItems.ID,
+                    Patch(
+                        ProductItems,
+                        LookUp(ProductItems, ThisItem.ID = ID), 
+                        {
+                            Qty: TextInputQty
+                
+                        }
+                    ),
+                    Collect(
+                        ProductItems,
+                        {
+                            ID: ThisItem.ID
+                        }
+                    )
+                )
+            OnSelect: =
+            Width: =83
+            X: =45
+            ZIndex: =1
+
+        TextInputItemNumber As text:
+            Default: |-
+                =DropDownProductDescriptions.Selected.'Item#'
+            Format: =TextFormat.Number
+            HintText: ="0"
+            OnSelect: =Select(Parent)
+            Width: =74
+            X: =152
+            ZIndex: =2
+
+        TextInputUnitPrice As text:
+            Default: |-
+                =Text(Value(DropDownProductDescriptions.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+            Format: =TextFormat.Number
+            HintText: ="0"
+            OnChange: =
+            OnSelect: =
+            Width: =120
+            X: =747
+            ZIndex: =4
+
+        TextInputDiscount As text:
+            Default: ="0"
+            Format: =TextFormat.Number
+            HintText: ="0"
+            OnSelect: =Select(Parent)
+            Width: =120
+            X: =894
+            ZIndex: =5
+
+        LineTotal As label:
+            OnSelect: =Select(Parent)
+            Text: =Value(TextInputQty.Text) * Value(TextInputUnitPrice.Text)
+            X: =1068
+            ZIndex: =6
+
+        Button5 As button:
+            Fill: =RGBA(238, 204, 204, 1)
+            OnSelect: |-
+                =RemoveIf(
+                    ProductItems,
+                    ID = ThisItem.ID
+                )
+            Size: =10
+            Text: ="remove"
+            Width: =85
+            X: =1144
+            ZIndex: =7
+
+        DropDownProductDescriptions As dropdown:
+            Items: =ProductDescriptions
+            OnSelect: =Select(Parent)
+            Width: =428
+            X: =301
+            ZIndex: =8
+
+    Button4 As button:
+        Height: =34
+        OnSelect: |
+            =If(
+              First(ProductItems).Description = "",
+              Remove(ProductItems, First(ProductItems))
+            );
+            Collect(
+              ProductItems,
+              {
+                ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                Qty: Value(TextInputQty.Text),
+                ItemNumber: Value(TextInputItemNumber.Text),
+                Description: DropDownProductDescriptions.Selected.ProductDescriptions,
+                UnitPrice: Value(TextInputUnitPrice.Text),
+                Discount: Value(TextInputDiscount.Text),
+                LineTotal: Value(TextInputQty.Text) * Value(TextInputUnitPrice.Text) * (1 - Value(TextInputDiscount.Text) / 100)
+              }
+            );
+        Size: =10
+        Text: ="Add item"
+        Visible: =false
+        Width: =89
+        X: =18
+        Y: =302
+        ZIndex: =17
+
+    Label5_6 As label:
+        Text: ="Total Discount $"
+        X: =326
+        Y: =701
+        ZIndex: =18
+
+    Label5_7 As label:
+        Text: ="Subtotal Sales Tax"
+        Width: =162
+        X: =530
+        Y: =701
+        ZIndex: =19
+
+    Label5_8 As label:
+        Text: ="Total"
+        X: =618
+        Y: =701
+        ZIndex: =20
+
+    Label2_11 As label:
+        Text: ="Payment due date"
+        X: =18
+        Y: =701
+        ZIndex: =21
+
+    InvoiceDueDate As datepicker:
+        Width: =165
+        X: =144
+        Y: =701
+        ZIndex: =22
+
+    Label2_12 As label:
+        Text: ="Invoice Date"
+        Width: =115
+        X: =653
+        Y: =80
+        ZIndex: =23
+
+    InvoiceDate As datepicker:
+        Width: =166
+        X: =602
+        Y: =80
+        ZIndex: =24
+
+    TotalDiscount As label:
+        Text: =Sum(ProductItems, TextInputDiscount)
+        Tooltip: =
+        Width: =47
+        X: =463
+        Y: =701
+        ZIndex: =25
+
+    TotalSubTotalSalesTax As label:
+        Text: |-
+            ="$ " & Text(Sum(LineTotal_1,LineTotal_2, LineTotal_3),"[$-en-US]#,##0.00")
+        Tooltip: |-
+            ="$ " & Text(Sum(ProductItems, LineTotal),"[$-en-US]#,##0.00")
+        Width: =102
+        X: =666
+        Y: =699
+        ZIndex: =27
+
+    Button6 As button:
+        Height: =56
+        OnSelect: |-
+            =Patch(
+              LuleEnterprisesInvoices,
+              Defaults(LuleEnterprisesInvoices),
+              {
+                Title: InvoiceNumber.Text,
+                InvoiceNumber: InvoiceNumber.Text,
+                InvoiceDate: InvoiceDate.SelectedDate, 
+                ClientName: ClientName.Text,
+                ClientEmail: ClientEmail.Text,
+                PaymentMethod: PaymentMethod.Selected.'Payment Methods',InvoiceDueDate: InvoiceDueDate.SelectedDate,
+                TotalPrice: TotalPrice.Text,
+                DeliveryDate: DeliveryDate.SelectedDate
+            
+              }
+            );
+            
+            ForAll(ProductItemsCollection,    
+            Patch(ProductInvoicesList,
+                 Defaults(ProductInvoicesList),      { 
+                Title: InvoiceNumber.Text,
+                  Qty: ProductItemsCollection[@Qty],
+                  ItemNumber: ProductItemsCollection[@ItemNumber],
+                  Description: ProductItemsCollection[@Description],
+                UnitPrice: ProductItemsCollection[@UnitPrice],
+                  Discount: ProductItemsCollection[@Discount],
+                  LineTotal: ProductItemsCollection[@LineTotal]
+                     }));
+            
+            Navigate(SuccessScreen);
+        Text: ="Send Invoice"
+        Width: =193
+        X: =575
+        Y: =1289
+        ZIndex: =28
+
+    InvoiceNumber As text:
+        Default: =Last(LuleEnterprisesInvoices).InvoiceNumber + 1
+        Format: =TextFormat.Number
+        HintText: ="0"
+        Width: =131
+        X: =637
+        Y: =80
+        ZIndex: =30
+
+    Icon5 As icon.Home:
+        Height: =60
+        Icon: =Icon.Home
+        OnSelect: =Navigate(Invoices)
+        ZIndex: =31
+
+    TextInputQty_1 As text:
+        Default: =""
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =83
+        X: =92
+        Y: =244
+        ZIndex: =32
+
+    TextInputItemNumber_1 As text:
+        Default: |-
+            =DropDownProductDescriptions_1.Selected.'Item#'
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =74
+        X: =199
+        Y: =244
+        ZIndex: =33
+
+    TextInputUnitPrice_1 As text:
+        Default: |-
+            =Text(Value(DropDownProductDescriptions_1.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =244
+        ZIndex: =34
+
+    TextInputDiscount_1 As text:
+        Default: ="0"
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =244
+        ZIndex: =35
+
+    LineTotal_1 As label:
+        Height: =26
+        OnSelect: =
+        Text: |-
+            ="$ " & Text(Value(TextInputQty_1.Text) * Value(TextInputUnitPrice_1.Text) - Value(TextInputDiscount_1.Text),"[$-en-US]#,##0.00")
+        X: =618
+        Y: =246
+        ZIndex: =36
+
+    DropDownProductDescriptions_1 As dropdown:
+        Height: =26
+        Items: =ProductDescriptions
+        OnSelect: =
+        Width: =428
+        X: =340
+        Y: =244
+        ZIndex: =37
+
+    TextInputQty_2 As text:
+        Default: =""
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: |
+            =
+        Width: =83
+        X: =92
+        Y: =308
+        ZIndex: =38
+
+    TextInputItemNumber_2 As text:
+        Default: |-
+            =DropDownProductDescriptions_2.Selected.'Item#'
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: |
+            =
+        Width: =74
+        X: =200
+        Y: =308
+        ZIndex: =39
+
+    TextInputUnitPrice_2 As text:
+        Default: |-
+            =Text(Value(DropDownProductDescriptions_2.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =308
+        ZIndex: =40
+
+    TextInputDiscount_2 As text:
+        Default: ="0"
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =308
+        ZIndex: =41
+
+    LineTotal_2 As label:
+        Height: =26
+        OnSelect: =
+        Text: |-
+            ="$ " & Text(Value(TextInputQty_2.Text) * Value(TextInputUnitPrice_2.Text) - Value(TextInputDiscount_2.Text),"[$-en-US]#,##0.00")
+        X: =618
+        Y: =308
+        ZIndex: =42
+
+    DropDownProductDescriptions_2 As dropdown:
+        Height: =26
+        Items: =ProductDescriptions
+        OnSelect: |
+            =
+        Width: =428
+        X: =340
+        Y: =308
+        ZIndex: =43
+
+    TextInputQty_3 As text:
+        Default: =""
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: |
+            =
+        Width: =83
+        X: =92
+        Y: =367
+        ZIndex: =44
+
+    TextInputItemNumber_3 As text:
+        Default: |-
+            =DropDownProductDescriptions_3.Selected.'Item#'
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: |
+            =
+        Width: =74
+        X: =199
+        Y: =367
+        ZIndex: =45
+
+    TextInputUnitPrice_3 As text:
+        Default: |-
+            =Text(Value(DropDownProductDescriptions_3.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =367
+        ZIndex: =46
+
+    TextInputDiscount_3 As text:
+        Default: ="0"
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =367
+        ZIndex: =47
+
+    LineTotal_3 As label:
+        Height: =26
+        OnSelect: =
+        Text: |-
+            ="$ " & Text(Value(TextInputQty_3.Text) * Value(TextInputUnitPrice_3.Text) - Value(TextInputDiscount_3.Text),"[$-en-US]#,##0.00")
+        X: =618
+        Y: =367
+        ZIndex: =48
+
+    DropDownProductDescriptions_3 As dropdown:
+        Height: =26
+        Items: =ProductDescriptions
+        OnSelect: |
+            =
+        Width: =428
+        X: =340
+        Y: =367
+        ZIndex: =49
+
+    Button4_1 As button:
+        Height: =34
+        OnSelect: |
+            =Collect(
+              ProductItemsCollection,
+              If(
+                Value(TextInputQty_1.Text) * Value(TextInputUnitPrice_1.Text) - Value(TextInputDiscount_1.Text) <> 0,
+                {
+                  ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                  Qty: Value(TextInputQty_1.Text),
+                  ItemNumber: Value(TextInputItemNumber_1.Text),
+                  Description: DropDownProductDescriptions_1.Selected.ProductDescriptions,
+                  UnitPrice: Value(TextInputUnitPrice_1.Text),
+                  Discount: Value(TextInputDiscount_1.Text),
+                  LineTotal: Value(TextInputQty_1.Text) * Value(TextInputUnitPrice_1.Text) - Value(TextInputDiscount_1.Text)
+                }
+              ),
+              If(
+                Value(TextInputQty_2.Text) * Value(TextInputUnitPrice_2.Text) - Value(TextInputDiscount_2.Text) <> 0,
+                {
+                  ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                  Qty: Value(TextInputQty_2.Text),
+                  ItemNumber: Value(TextInputItemNumber_2.Text),
+                  Description: DropDownProductDescriptions_2.Selected.ProductDescriptions,
+                  UnitPrice: Value(TextInputUnitPrice_2.Text),
+                  Discount: Value(TextInputDiscount_2.Text),
+                  LineTotal: Value(TextInputQty_2.Text) * Value(TextInputUnitPrice_2.Text) - Value(TextInputDiscount_2.Text)
+                }
+              ),
+              If(
+                Value(TextInputQty_3.Text) * Value(TextInputUnitPrice_3.Text) - Value(TextInputDiscount_3.Text) <> 0,
+                {
+                  ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                  Qty: Value(TextInputQty_3.Text),
+                  ItemNumber: Value(TextInputItemNumber_3.Text),
+                  Description: DropDownProductDescriptions_3.Selected.ProductDescriptions,
+                  UnitPrice: Value(TextInputUnitPrice_3.Text),
+                  Discount: Value(TextInputDiscount_3.Text),
+                  LineTotal: Value(TextInputQty_3.Text) * Value(TextInputUnitPrice_3.Text) - Value(TextInputDiscount_3.Text)
+                }
+              ),
+              If(
+                Value(TextInputQty_5.Text) * Value(TextInputUnitPrice_5.Text) - Value(TextInputDiscount_5.Text) <> 0,
+                {
+                  ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                  Qty: Value(TextInputQty_5.Text),
+                  ItemNumber: Value(TextInputItemNumber_5.Text),
+                  Description: DropDownProductDescriptions_5.Selected.ProductDescriptions,
+                  UnitPrice: Value(TextInputUnitPrice_5.Text),
+                  Discount: Value(TextInputDiscount_5.Text),
+                  LineTotal: Value(TextInputQty_5.Text) * Value(TextInputUnitPrice_5.Text) - Value(TextInputDiscount_5.Text)
+                }
+              ),
+              If(
+                Value(TextInputQty_6.Text) * Value(TextInputUnitPrice_6.Text) - Value(TextInputDiscount_6.Text) <> 0,
+                {
+                  ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                  Qty: Value(TextInputQty_6.Text),
+                  ItemNumber: Value(TextInputItemNumber_6.Text),
+                  Description: DropDownProductDescriptions_6.Selected.ProductDescriptions,
+                  UnitPrice: Value(TextInputUnitPrice_6.Text),
+                  Discount: Value(TextInputDiscount_6.Text),
+                  LineTotal: Value(TextInputQty_6.Text) * Value(TextInputUnitPrice_6.Text) - Value(TextInputDiscount_6.Text)
+                }
+              ),
+              If(
+                Value(TextInputQty_7.Text) * Value(TextInputUnitPrice_7.Text) - Value(TextInputDiscount_7.Text) <> 0,
+                {
+                  ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                  Qty: Value(TextInputQty_7.Text),
+                  ItemNumber: Value(TextInputItemNumber_7.Text),
+                  Description: DropDownProductDescriptions_7.Selected.ProductDescriptions,
+                  UnitPrice: Value(TextInputUnitPrice_7.Text),
+                  Discount: Value(TextInputDiscount_7.Text),
+                  LineTotal: Value(TextInputQty_7.Text) * Value(TextInputUnitPrice_7.Text) - Value(TextInputDiscount_7.Text)
+                }
+              ),
+              If(
+                Value(TextInputQty_8.Text) * Value(TextInputUnitPrice_8.Text) - Value(TextInputDiscount_8.Text) <> 0,
+                {
+                  ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                  Qty: Value(TextInputQty_8.Text),
+                  ItemNumber: Value(TextInputItemNumber_8.Text),
+                  Description: DropDownProductDescriptions_8.Selected.ProductDescriptions,
+                  UnitPrice: Value(TextInputUnitPrice_8.Text),
+                  Discount: Value(TextInputDiscount_8.Text),
+                  LineTotal: Value(TextInputQty_8.Text) * Value(TextInputUnitPrice_8.Text) - Value(TextInputDiscount_8.Text)
+                }
+              ),
+              If(
+                Value(TextInputQty_9.Text) * Value(TextInputUnitPrice_9.Text) - Value(TextInputDiscount_9.Text) <> 0,
+                {
+                  ID: Text(Now(), "[$-en-US]yyyy-mm-dd-hh-mm-ss-fff"),
+                  Qty: Value(TextInputQty_9.Text),
+                  ItemNumber: Value(TextInputItemNumber_9.Text),
+                  Description: DropDownProductDescriptions_9.Selected.ProductDescriptions,
+                  UnitPrice: Value(TextInputUnitPrice_9.Text),
+                  Discount: Value(TextInputDiscount_9.Text),
+                  LineTotal: Value(TextInputQty_9.Text) * Value(TextInputUnitPrice_9.Text) - Value(TextInputDiscount_9.Text)
+                }
+              )
+            );
+        Size: =10
+        Text: |-
+            ="Calculate Total
+            "
+        Width: =89
+        X: =679
+        Y: =634
+        ZIndex: =50
+
+    "ProductItemGallery As gallery.'BrowseLayout_Flexible_SocialFeed_ver4.0'":
+        DelayItemLoading: =true
+        Height: =173
+        Items: =ProductItemsCollection
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        OnSelect: =
+        TabIndex: =1
+        TemplatePadding: =4
+        TemplateSize: =200
+        Visible: =false
+        Width: =768
+        Y: =399
+        ZIndex: =51
+
+        TextInputQty_4 As text:
+            Default: =""
+            Format: =TextFormat.Number
+            HintText: ="0"
+            OnChange: =
+            OnSelect: =
+            Width: =83
+            X: =44
+            Y: =10
+            ZIndex: =1
+
+        TextInputItemNumber_4 As text:
+            Default: =
+            Format: =TextFormat.Number
+            HintText: ="0"
+            OnSelect: =Select(Parent)
+            Width: =74
+            X: =151
+            Y: =10
+            ZIndex: =2
+
+        TextInputUnitPrice_4 As text:
+            Default: =
+            Format: =TextFormat.Number
+            HintText: ="0"
+            OnChange: =
+            OnSelect: =
+            Width: =120
+            X: =746
+            Y: =10
+            ZIndex: =4
+
+        TextInputDiscount_4 As text:
+            Default: ="0"
+            Format: =TextFormat.Number
+            HintText: ="0"
+            OnSelect: =Select(Parent)
+            Width: =120
+            X: =893
+            Y: =10
+            ZIndex: =5
+
+        LineTotal_4 As label:
+            OnSelect: =Select(Parent)
+            Text: =
+            X: =1067
+            Y: =10
+            ZIndex: =6
+
+        Button5_1 As button:
+            Fill: =RGBA(238, 204, 204, 1)
+            OnSelect: =
+            Size: =10
+            Text: ="remove"
+            Width: =85
+            X: =1143
+            Y: =10
+            ZIndex: =7
+
+        DropDownProductDescriptions_4 As dropdown:
+            Items: =ProductDescriptions
+            OnSelect: =Select(Parent)
+            Width: =428
+            X: =300
+            Y: =10
+            ZIndex: =8
+
+    TotalPrice As label:
+        Text: |-
+            ="$ " & Text(Sum(LineTotal_1,LineTotal_2, LineTotal_3),"[$-en-US]#,##0.00")
+        Tooltip: |-
+            ="$ " & Text(Sum(ProductItems, LineTotal),"[$-en-US]#,##0.00")
+        X: =618
+        Y: =701
+        ZIndex: =52
+
+    TextInputQty_5 As text:
+        Default: =""
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =83
+        X: =92
+        Y: =413
+        ZIndex: =53
+
+    TextInputItemNumber_5 As text:
+        Default: |-
+            =DropDownProductDescriptions_5.Selected.'Item#'
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =74
+        X: =199
+        Y: =413
+        ZIndex: =54
+
+    TextInputUnitPrice_5 As text:
+        Default: |-
+            =Text(Value(DropDownProductDescriptions_5.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =413
+        ZIndex: =55
+
+    TextInputDiscount_5 As text:
+        Default: ="0"
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =413
+        ZIndex: =56
+
+    LineTotal_5 As label:
+        Height: =26
+        OnSelect: =
+        Text: |-
+            ="$ " & Text(Value(TextInputQty_5.Text) * Value(TextInputUnitPrice_5.Text) - Value(TextInputDiscount_5.Text),"[$-en-US]#,##0.00")
+        X: =618
+        Y: =414
+        ZIndex: =57
+
+    DropDownProductDescriptions_5 As dropdown:
+        Height: =26
+        Items: =ProductDescriptions
+        OnSelect: =
+        Width: =428
+        X: =340
+        Y: =413
+        ZIndex: =58
+
+    TextInputQty_6 As text:
+        Default: =""
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: |
+            =
+        Width: =83
+        X: =92
+        Y: =477
+        ZIndex: =59
+
+    TextInputItemNumber_6 As text:
+        Default: |-
+            =DropDownProductDescriptions_6.Selected.'Item#'
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: |
+            =
+        Width: =74
+        X: =200
+        Y: =477
+        ZIndex: =60
+
+    TextInputUnitPrice_6 As text:
+        Default: |-
+            =Text(Value(DropDownProductDescriptions_6.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =469
+        ZIndex: =61
+
+    TextInputDiscount_6 As text:
+        Default: ="0"
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =469
+        ZIndex: =62
+
+    LineTotal_6 As label:
+        Height: =26
+        OnSelect: =
+        Text: |-
+            ="$ " & Text(Value(TextInputQty_6.Text) * Value(TextInputUnitPrice_6.Text) - Value(TextInputDiscount_6.Text),"[$-en-US]#,##0.00")
+        X: =618
+        Y: =469
+        ZIndex: =63
+
+    DropDownProductDescriptions_6 As dropdown:
+        Height: =26
+        Items: =ProductDescriptions
+        OnSelect: |
+            =
+        Width: =428
+        X: =340
+        Y: =469
+        ZIndex: =64
+
+    TextInputQty_7 As text:
+        Default: =""
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: |
+            =
+        Width: =83
+        X: =92
+        Y: =536
+        ZIndex: =65
+
+    TextInputItemNumber_7 As text:
+        Default: |-
+            =DropDownProductDescriptions_7.Selected.'Item#'
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: |
+            =
+        Width: =74
+        X: =199
+        Y: =536
+        ZIndex: =66
+
+    TextInputUnitPrice_7 As text:
+        Default: |-
+            =Text(Value(DropDownProductDescriptions_7.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =536
+        ZIndex: =67
+
+    TextInputDiscount_7 As text:
+        Default: ="0"
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =536
+        ZIndex: =68
+
+    LineTotal_7 As label:
+        Height: =26
+        OnSelect: =
+        Text: |-
+            ="$ " & Text(Value(TextInputQty_7.Text) * Value(TextInputUnitPrice_7.Text) - Value(TextInputDiscount_7.Text),"[$-en-US]#,##0.00")
+        X: =618
+        Y: =536
+        ZIndex: =69
+
+    DropDownProductDescriptions_7 As dropdown:
+        Height: =26
+        Items: =ProductDescriptions
+        OnSelect: |
+            =
+        Width: =428
+        X: =340
+        Y: =536
+        ZIndex: =70
+
+    TextInputQty_8 As text:
+        Default: =""
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: |
+            =
+        Width: =83
+        X: =92
+        Y: =585
+        ZIndex: =71
+
+    TextInputItemNumber_8 As text:
+        Default: |-
+            =DropDownProductDescriptions_8.Selected.'Item#'
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: |
+            =
+        Width: =74
+        X: =199
+        Y: =585
+        ZIndex: =72
+
+    TextInputUnitPrice_8 As text:
+        Default: |-
+            =Text(Value(DropDownProductDescriptions_8.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =585
+        ZIndex: =73
+
+    TextInputDiscount_8 As text:
+        Default: ="0"
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =585
+        ZIndex: =74
+
+    LineTotal_8 As label:
+        Height: =26
+        OnSelect: =
+        Text: |-
+            ="$ " & Text(Value(TextInputQty_8.Text) * Value(TextInputUnitPrice_8.Text) - Value(TextInputDiscount_8.Text),"[$-en-US]#,##0.00")
+        X: =618
+        Y: =585
+        ZIndex: =75
+
+    DropDownProductDescriptions_8 As dropdown:
+        Height: =26
+        Items: =ProductDescriptions
+        OnSelect: |
+            =
+        Width: =428
+        X: =340
+        Y: =585
+        ZIndex: =76
+
+    TextInputQty_9 As text:
+        Default: =""
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: |
+            =
+        Width: =83
+        X: =92
+        Y: =642
+        ZIndex: =77
+
+    TextInputItemNumber_9 As text:
+        Default: |-
+            =DropDownProductDescriptions_9.Selected.'Item#'
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: |
+            =
+        Width: =74
+        X: =199
+        Y: =642
+        ZIndex: =78
+
+    TextInputUnitPrice_9 As text:
+        Default: |-
+            =Text(Value(DropDownProductDescriptions_9.Selected.'Unit Price') ,"[$-en-US]#,##0.00")
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnChange: =
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =642
+        ZIndex: =79
+
+    TextInputDiscount_9 As text:
+        Default: ="0"
+        Format: =TextFormat.Number
+        Height: =26
+        HintText: ="0"
+        OnSelect: =
+        Width: =120
+        X: =648
+        Y: =642
+        ZIndex: =80
+
+    LineTotal_9 As label:
+        Height: =26
+        OnSelect: =
+        Text: |-
+            ="$ " & Text(Value(TextInputQty_9.Text) * Value(TextInputUnitPrice_9.Text) - Value(TextInputDiscount_9.Text),"[$-en-US]#,##0.00")
+        Width: =90
+        X: =678
+        Y: =642
+        ZIndex: =81
+
+    DropDownProductDescriptions_9 As dropdown:
+        Height: =26
+        Items: =ProductDescriptions
+        OnSelect: |
+            =
+        Width: =428
+        X: =340
+        Y: =642
+        ZIndex: =82
+
+    Label2_13 As label:
+        Text: ="Delivery Date"
+        Width: =115
+        X: =653
+        Y: =132
+        ZIndex: =83
+
+    DeliveryDate As datepicker:
+        Width: =166
+        X: =602
+        Y: =132
+        ZIndex: =84
+
+    TextInput1 As text:
+        Default: =
+        Visible: =!IsBlank(ClientEmail.SearchText) && IsEmpty(ClientEmail.SelectedItems)
+        Width: =160
+        X: =32
+        Y: =10
+        ZIndex: =86
+
+    ClientNameComboBox As combobox:
+        DisplayFields: =["ClientName"]
+        Items: =Clients
+        SearchFields: =["ClientName"]
+        SearchItems: =Search(Clients,ClientNameComboBox.SearchText,"ClientName")
+        Width: =242
+        X: =107
+        Y: =80
+        ZIndex: =87
+
+    ClientEmail As combobox:
+        DisplayFields: =["ClientEmail"]
+        IsSearchable: =false
+        Items: =Filter(Clients, ClientName = ClientName.Selected.Result).ClientEmail
+        SearchFields: =["ClientName"]
+        SearchItems: =[]
+        Width: =242
+        X: =374
+        Y: =80
+        ZIndex: =88
+

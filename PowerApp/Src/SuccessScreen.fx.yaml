@@ -1,0 +1,40 @@
+SuccessScreen As screen:
+
+    Icon2 As icon.CheckBadge:
+        Icon: =Icon.CheckBadge
+        X: =608
+        Y: =216
+        ZIndex: =1
+
+    Label8 As label:
+        Align: =Align.Center
+        Text: ="Invoice was created succesfully!"
+        Width: =351
+        X: =417
+        Y: =333
+        ZIndex: =2
+
+    Label8_1 As label:
+        Align: =Align.Center
+        Text: ="Email has been sent to the customer, and you will receive a copy shortly."
+        Width: =351
+        X: =417
+        Y: =495
+        ZIndex: =3
+
+    Button2 As button:
+        Height: =61
+        OnSelect: =Navigate(Invoices)
+        Text: ="Back to Invoices"
+        X: =448
+        Y: =556
+        ZIndex: =4
+
+    Button2_1 As button:
+        Height: =61
+        OnSelect: =Navigate(NewInvoice);Clear(ProductItems);
+        Text: ="Add Invoice"
+        X: =608
+        Y: =556
+        ZIndex: =5
+

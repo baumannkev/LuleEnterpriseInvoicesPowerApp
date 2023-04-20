@@ -1,0 +1,18 @@
+{
+  "QualifiedValues": [
+    {
+      "Kind": "default.cds_cr346_products_forms",
+      "Namespace": "Products (Forms)",
+      "Values": {
+        "Information": "1cd92581-602a-4d88-8d53-cceccb5d21f3"
+      }
+    },
+    {
+      "Kind": "default.cds_sharepointsite_forms",
+      "Namespace": "SharePoint Sites (Forms)",
+      "Values": {
+        "Information": "ba6522af-e71b-df11-aa01-00155d2a9006"
+      }
+    }
+  ]
+}
