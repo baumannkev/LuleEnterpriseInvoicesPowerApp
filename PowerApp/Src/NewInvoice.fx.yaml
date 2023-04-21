@@ -219,32 +219,32 @@ NewInvoice As screen:
     Label5_6 As label:
         Text: ="Total Discount $"
         X: =322
-        Y: =933
+        Y: =1016
         ZIndex: =18
 
     Label5_7 As label:
         Text: ="Subtotal Sales Tax"
         Width: =162
         X: =526
-        Y: =933
+        Y: =1016
         ZIndex: =19
 
     Label5_8 As label:
         Text: ="Total"
         X: =532
-        Y: =996
+        Y: =1079
         ZIndex: =20
 
     Label2_11 As label:
         Text: ="Payment due date"
         X: =14
-        Y: =933
+        Y: =1016
         ZIndex: =21
 
     InvoiceDueDate As datepicker:
         Width: =165
         X: =140
-        Y: =933
+        Y: =1016
         ZIndex: =22
 
     Label2_12 As label:
@@ -275,23 +275,27 @@ NewInvoice As screen:
             ="$ " & Text(Sum(ProductItems, LineTotal),"[$-en-US]#,##0.00")
         Width: =102
         X: =580
-        Y: =994
+        Y: =1077
         ZIndex: =27
 
-    Button6 As button:
+    SendInvoiceButton As button:
         Height: =56
         OnSelect: |-
             =If(
-                !IsBlank(currentClient) && !IsBlank(currentClientEmail),
-                Patch(
-                    Clients,
-                    Defaults(Clients),
-                    {
-                        ClientName: currentClient,
-                        ClientEmail: currentClientEmail
-                    }
+                IsBlank(LookUp(Clients, ClientName = ComboBoxClientName.SearchText)),
+                If(
+                    !IsBlank(ComboBoxClientName.SearchText) And !IsBlank(ComboBoxClientEmail.SearchText),
+                    Patch(
+                        Clients,
+                        Defaults(Clients),
+                        {
+                            ClientName: ComboBoxClientName.SearchText,
+                            ClientEmail: ComboBoxClientEmail.SearchText
+                        }
+                    )
                 )
             );
+            
             Patch(
               LuleEnterprisesInvoices,
               Defaults(LuleEnterprisesInvoices),
@@ -325,7 +329,7 @@ NewInvoice As screen:
             Navigate(SuccessScreen);
         Text: ="Send Invoice"
         Width: =193
-        X: =575
+        X: =555
         Y: =1289
         ZIndex: =28
 
@@ -552,8 +556,8 @@ NewInvoice As screen:
         ZIndex: =49
 
     Button4_1 As button:
-        Height: =34
-        OnSelect: |
+        Height: =49
+        OnSelect: |-
             =Collect(
               ProductItemsCollection,
               If(
@@ -653,12 +657,14 @@ NewInvoice As screen:
                 }
               )
             );
+            
+            If(IsEmpty(ProductItemsCollection), UpdateContext({ShowWarningLabel: true}), UpdateContext({ShowWarningLabel: false}));
         Size: =10
         Text: |-
             ="Calculate Total
             "
-        Width: =89
-        X: =644
+        Width: =104
+        X: =629
         Y: =873
         ZIndex: =50
 
@@ -751,7 +757,7 @@ NewInvoice As screen:
             ="$ " & Text(Sum(ProductItems, LineTotal),"[$-en-US]#,##0.00")
         Width: =76
         X: =688
-        Y: =933
+        Y: =1016
         ZIndex: =52
 
     TextInputQty_5 As text:
@@ -1118,13 +1124,16 @@ NewInvoice As screen:
         DisplayFields: =["ClientName"]
         InputTextPlaceholder: ="Find client"
         Items: =Clients
+        OnChange: |
+            =Set(currentClient, ComboBoxClientName.SearchText)
         OnSelect: |
             =Set(currentClient, ComboBoxClientName.Selected.ClientName)
+        Reset: =true
         SearchFields: =["ClientName"]
         SearchItems: =Search(Clients,ComboBoxClientName.SearchText,"ClientName")
         SelectMultiple: =false
         Width: =242
-        X: =107
+        X: =98
         Y: =80
         ZIndex: =87
 
@@ -1133,16 +1142,19 @@ NewInvoice As screen:
         InputTextPlaceholder: ="Find email"
         Items: |
             =Clients
+        OnChange: |
+            =Set(currentClientEmail, ComboBoxClientEmail.SearchText)
         OnSelect: |
             =Set(currentClientEmail, ComboBoxClientEmail.Selected.ClientEmail)
+        Reset: =true
         SearchFields: =["ClientEmail"]
         SearchItems: |-
             =Search(Clients
             ,ComboBoxClientEmail.SearchText,"ClientEmail")
         SelectMultiple: =false
         Width: =242
-        X: =108
-        Y: =138
+        X: =98
+        Y: =139
         ZIndex: =88
 
     Label2_14 As label:
@@ -1164,8 +1176,8 @@ NewInvoice As screen:
     Label2_15 As label:
         Text: =ComboBoxClientEmail.SearchText
         Width: =115
-        X: =514
-        Y: =200
+        X: =306
+        Y: =251
         ZIndex: =91
 
     Label18_1 As label:
@@ -1176,7 +1188,57 @@ NewInvoice As screen:
 
     Label18_2 As label:
         Text: =ComboBoxClientName.Selected.ClientName
-        X: =316
-        Y: =251
+        X: =98
+        Y: =180
         ZIndex: =93
+
+    Label18_3 As label:
+        Text: =currentClient
+        X: =101
+        Y: =252
+        ZIndex: =94
+
+    Label2_16 As label:
+        Text: =currentClientEmail
+        Width: =115
+        X: =514
+        Y: =238
+        ZIndex: =95
+
+    TotalCalculatedLabel As label:
+        Text: ="Total Calculated!"
+        Visible: =!IsEmpty(ProductItemsCollection)
+        X: =302
+        Y: =939
+        ZIndex: =96
+
+    AddMediaWithImage As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =98
+
+        UploadedImage As image:
+            Height: =116
+            Image: =If(IsBlank(AddMediaButton.Media), SampleImage, AddMediaButton.Media)
+            ImagePosition: =ImagePosition.Fill
+            Width: =295
+            X: =AddMediaButton.X
+            Y: =AddMediaButton.Y
+            ZIndex: =99
+
+        AddMediaButton As addMedia:
+            Height: =116
+            Size: =25
+            Width: =295
+            X: =28
+            Y: =1099
+            ZIndex: =100
+
+    Button3 As button:
+        Text: ="Button"
+        X: =55
+        Y: =1275
+        ZIndex: =101
 

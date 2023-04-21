@@ -1,8 +1,8 @@
 [
   {
     "ApiId": "/providers/microsoft.powerapps/apis/shared_logicflows",
-    "FlowNameId": "0dca5f17-39f2-4a38-89a8-f05c04f21299",
-    "Name": "ReceiptAuto",
+    "FlowNameId": "1e10405a-9e49-4675-b049-db3b031f42b9",
+    "Name": "PowerAppV2->Createfile",
     "ServiceKind": "ConnectedWadl",
     "Type": "ServiceInfo",
     "WorkflowEntityId": null
