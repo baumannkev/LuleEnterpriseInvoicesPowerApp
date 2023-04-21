@@ -1,7 +1,8 @@
 NewInvoice As screen:
     Fill: |
         =
-    OnVisible: =Clear(ProductItemsCollection)
+    OnVisible: |
+        =Clear(ProductItemsCollection);
 
     Label17 As label:
         Align: =Align.Center
@@ -15,24 +16,24 @@ NewInvoice As screen:
     Label18 As label:
         Text: |-
             ="Invoice #"
-        X: =618
-        Y: =80
+        X: =437
+        Y: =79
         ZIndex: =2
 
     Label2_8 As label:
         Text: |-
             ="Sold to:"
         VerticalAlign: =VerticalAlign.Top
-        X: =30
+        X: =14
         Y: =80
         ZIndex: =4
 
     Container2_2 As groupContainer.horizontalAutoLayoutContainer:
-        Height: =139
+        Height: =72
         LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
         LayoutMode: =LayoutMode.Auto
         Width: =768
-        Y: =140
+        Y: =303
         ZIndex: =6
 
         Label2_9 As label:
@@ -41,50 +42,52 @@ NewInvoice As screen:
 
     PaymentMethod As dropdown:
         Items: =PaymentMethods
-        X: =192
-        Y: =141
+        X: =157
+        Y: =303
         ZIndex: =7
 
     Label2_10 As label:
         Text: ="Qty"
         Width: =52
         X: =28
-        Y: =198
+        Y: =372
         ZIndex: =10
 
     Label3_7 As label:
         Text: |-
             ="Item #"
         Width: =71
-        X: =135
-        Y: =198
+        X: =100
+        Y: =372
         ZIndex: =11
 
     Label3_8 As label:
         Text: ="Description"
-        X: =208
-        Y: =200
+        X: =173
+        Y: =374
         ZIndex: =12
 
     Label4_2 As label:
         Height: =39
         Text: ="Unit Price"
         Width: =93
-        X: =472
-        Y: =201
+        X: =437
+        Y: =375
         ZIndex: =13
 
     Label5_5 As label:
         Text: ="Discount"
         Width: =86
-        X: =592
-        Y: =191
+        X: =547
+        Y: =378
         ZIndex: =14
 
     Label6_2 As label:
+        Height: =42
         Text: ="Line Total"
-        X: =596
-        Y: =156
+        Width: =96
+        X: =633
+        Y: =378
         ZIndex: =15
 
     "Gallery2 As gallery.'BrowseLayout_Flexible_SocialFeed_ver4.0'":
@@ -209,60 +212,60 @@ NewInvoice As screen:
         Text: ="Add item"
         Visible: =false
         Width: =89
-        X: =18
-        Y: =302
+        X: =28
+        Y: =261
         ZIndex: =17
 
     Label5_6 As label:
         Text: ="Total Discount $"
-        X: =326
-        Y: =701
+        X: =322
+        Y: =933
         ZIndex: =18
 
     Label5_7 As label:
         Text: ="Subtotal Sales Tax"
         Width: =162
-        X: =530
-        Y: =701
+        X: =526
+        Y: =933
         ZIndex: =19
 
     Label5_8 As label:
         Text: ="Total"
-        X: =618
-        Y: =701
+        X: =532
+        Y: =996
         ZIndex: =20
 
     Label2_11 As label:
         Text: ="Payment due date"
-        X: =18
-        Y: =701
+        X: =14
+        Y: =933
         ZIndex: =21
 
     InvoiceDueDate As datepicker:
         Width: =165
-        X: =144
-        Y: =701
+        X: =140
+        Y: =933
         ZIndex: =22
 
     Label2_12 As label:
         Text: ="Invoice Date"
         Width: =115
-        X: =653
-        Y: =80
+        X: =440
+        Y: =138
         ZIndex: =23
 
     InvoiceDate As datepicker:
         Width: =166
-        X: =602
-        Y: =80
+        X: =592
+        Y: =140
         ZIndex: =24
 
     TotalDiscount As label:
         Text: =Sum(ProductItems, TextInputDiscount)
         Tooltip: =
         Width: =47
-        X: =463
-        Y: =701
+        X: =464
+        Y: =933
         ZIndex: =25
 
     TotalSubTotalSalesTax As label:
@@ -271,23 +274,34 @@ NewInvoice As screen:
         Tooltip: |-
             ="$ " & Text(Sum(ProductItems, LineTotal),"[$-en-US]#,##0.00")
         Width: =102
-        X: =666
-        Y: =699
+        X: =580
+        Y: =994
         ZIndex: =27
 
     Button6 As button:
         Height: =56
         OnSelect: |-
-            =Patch(
+            =If(
+                !IsBlank(currentClient) && !IsBlank(currentClientEmail),
+                Patch(
+                    Clients,
+                    Defaults(Clients),
+                    {
+                        ClientName: currentClient,
+                        ClientEmail: currentClientEmail
+                    }
+                )
+            );
+            Patch(
               LuleEnterprisesInvoices,
               Defaults(LuleEnterprisesInvoices),
               {
                 Title: InvoiceNumber.Text,
                 InvoiceNumber: InvoiceNumber.Text,
                 InvoiceDate: InvoiceDate.SelectedDate, 
-                ClientName: ClientName.Text,
-                ClientEmail: ClientEmail.Text,
-                PaymentMethod: PaymentMethod.Selected.'Payment Methods',InvoiceDueDate: InvoiceDueDate.SelectedDate,
+                ClientName: If(IsBlank(currentClient), ComboBoxClientName.SearchText, currentClient),
+            ClientEmail: If(IsBlank(currentClientEmail), ComboBoxClientEmail.SearchText, currentClientEmail)
+            ,PaymentMethod: PaymentMethod.Selected.'Payment Methods',InvoiceDueDate: InvoiceDueDate.SelectedDate,
                 TotalPrice: TotalPrice.Text,
                 DeliveryDate: DeliveryDate.SelectedDate
             
@@ -306,6 +320,8 @@ NewInvoice As screen:
                   LineTotal: ProductItemsCollection[@LineTotal]
                      }));
             
+            
+            
             Navigate(SuccessScreen);
         Text: ="Send Invoice"
         Width: =193
@@ -318,8 +334,8 @@ NewInvoice As screen:
         Format: =TextFormat.Number
         HintText: ="0"
         Width: =131
-        X: =637
-        Y: =80
+        X: =592
+        Y: =79
         ZIndex: =30
 
     Icon5 As icon.Home:
@@ -337,7 +353,7 @@ NewInvoice As screen:
         OnSelect: =
         Width: =49
         X: =28
-        Y: =244
+        Y: =418
         ZIndex: =32
 
     TextInputItemNumber_1 As text:
@@ -348,8 +364,8 @@ NewInvoice As screen:
         HintText: ="0"
         OnSelect: =
         Width: =44
-        X: =135
-        Y: =244
+        X: =100
+        Y: =418
         ZIndex: =33
 
     TextInputUnitPrice_1 As text:
@@ -361,8 +377,8 @@ NewInvoice As screen:
         OnChange: =
         OnSelect: =
         Width: =83
-        X: =482
-        Y: =244
+        X: =457
+        Y: =418
         ZIndex: =34
 
     TextInputDiscount_1 As text:
@@ -372,17 +388,18 @@ NewInvoice As screen:
         HintText: ="0"
         OnSelect: =
         Width: =53
-        X: =595
-        Y: =245
+        X: =560
+        Y: =419
         ZIndex: =35
 
     LineTotal_1 As label:
-        Height: =26
+        Height: =24
         OnSelect: =
         Text: |-
             ="$ " & Text(Value(TextInputQty_1.Text) * Value(TextInputUnitPrice_1.Text) - Value(TextInputDiscount_1.Text),"[$-en-US]#,##0.00")
-        X: =618
-        Y: =211
+        Width: =85
+        X: =644
+        Y: =420
         ZIndex: =36
 
     DropDownProductDescriptions_1 As dropdown:
@@ -390,8 +407,8 @@ NewInvoice As screen:
         Items: =ProductDescriptions
         OnSelect: =
         Width: =276
-        X: =200
-        Y: =246
+        X: =165
+        Y: =420
         ZIndex: =37
 
     TextInputQty_2 As text:
@@ -404,7 +421,7 @@ NewInvoice As screen:
             =
         Width: =49
         X: =28
-        Y: =308
+        Y: =482
         ZIndex: =38
 
     TextInputItemNumber_2 As text:
@@ -416,8 +433,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =44
-        X: =136
-        Y: =308
+        X: =101
+        Y: =482
         ZIndex: =39
 
     TextInputUnitPrice_2 As text:
@@ -428,9 +445,9 @@ NewInvoice As screen:
         HintText: ="0"
         OnChange: =
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =308
+        Width: =78
+        X: =452
+        Y: =482
         ZIndex: =40
 
     TextInputDiscount_2 As text:
@@ -439,9 +456,9 @@ NewInvoice As screen:
         Height: =26
         HintText: ="0"
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =308
+        Width: =53
+        X: =560
+        Y: =482
         ZIndex: =41
 
     LineTotal_2 As label:
@@ -449,8 +466,9 @@ NewInvoice As screen:
         OnSelect: =
         Text: |-
             ="$ " & Text(Value(TextInputQty_2.Text) * Value(TextInputUnitPrice_2.Text) - Value(TextInputDiscount_2.Text),"[$-en-US]#,##0.00")
-        X: =618
-        Y: =308
+        Width: =89
+        X: =644
+        Y: =482
         ZIndex: =42
 
     DropDownProductDescriptions_2 As dropdown:
@@ -459,8 +477,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =276
-        X: =200
-        Y: =310
+        X: =165
+        Y: =484
         ZIndex: =43
 
     TextInputQty_3 As text:
@@ -473,7 +491,7 @@ NewInvoice As screen:
             =
         Width: =49
         X: =28
-        Y: =367
+        Y: =541
         ZIndex: =44
 
     TextInputItemNumber_3 As text:
@@ -485,8 +503,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =44
-        X: =135
-        Y: =367
+        X: =100
+        Y: =541
         ZIndex: =45
 
     TextInputUnitPrice_3 As text:
@@ -497,9 +515,9 @@ NewInvoice As screen:
         HintText: ="0"
         OnChange: =
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =367
+        Width: =78
+        X: =452
+        Y: =541
         ZIndex: =46
 
     TextInputDiscount_3 As text:
@@ -508,9 +526,9 @@ NewInvoice As screen:
         Height: =26
         HintText: ="0"
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =367
+        Width: =53
+        X: =560
+        Y: =541
         ZIndex: =47
 
     LineTotal_3 As label:
@@ -518,8 +536,9 @@ NewInvoice As screen:
         OnSelect: =
         Text: |-
             ="$ " & Text(Value(TextInputQty_3.Text) * Value(TextInputUnitPrice_3.Text) - Value(TextInputDiscount_3.Text),"[$-en-US]#,##0.00")
-        X: =618
-        Y: =367
+        Width: =89
+        X: =644
+        Y: =541
         ZIndex: =48
 
     DropDownProductDescriptions_3 As dropdown:
@@ -528,8 +547,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =276
-        X: =200
-        Y: =369
+        X: =165
+        Y: =543
         ZIndex: =49
 
     Button4_1 As button:
@@ -639,8 +658,8 @@ NewInvoice As screen:
             ="Calculate Total
             "
         Width: =89
-        X: =679
-        Y: =634
+        X: =644
+        Y: =873
         ZIndex: =50
 
     "ProductItemGallery As gallery.'BrowseLayout_Flexible_SocialFeed_ver4.0'":
@@ -655,7 +674,7 @@ NewInvoice As screen:
         TemplateSize: =200
         Visible: =false
         Width: =768
-        Y: =399
+        Y: =573
         ZIndex: =51
 
         TextInputQty_4 As text:
@@ -730,8 +749,9 @@ NewInvoice As screen:
             ="$ " & Text(Sum(LineTotal_1,LineTotal_2, LineTotal_3),"[$-en-US]#,##0.00")
         Tooltip: |-
             ="$ " & Text(Sum(ProductItems, LineTotal),"[$-en-US]#,##0.00")
-        X: =618
-        Y: =701
+        Width: =76
+        X: =688
+        Y: =933
         ZIndex: =52
 
     TextInputQty_5 As text:
@@ -743,7 +763,7 @@ NewInvoice As screen:
         OnSelect: =
         Width: =49
         X: =28
-        Y: =413
+        Y: =587
         ZIndex: =53
 
     TextInputItemNumber_5 As text:
@@ -754,8 +774,8 @@ NewInvoice As screen:
         HintText: ="0"
         OnSelect: =
         Width: =44
-        X: =135
-        Y: =413
+        X: =100
+        Y: =587
         ZIndex: =54
 
     TextInputUnitPrice_5 As text:
@@ -766,9 +786,9 @@ NewInvoice As screen:
         HintText: ="0"
         OnChange: =
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =413
+        Width: =78
+        X: =452
+        Y: =587
         ZIndex: =55
 
     TextInputDiscount_5 As text:
@@ -777,9 +797,9 @@ NewInvoice As screen:
         Height: =26
         HintText: ="0"
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =413
+        Width: =53
+        X: =560
+        Y: =587
         ZIndex: =56
 
     LineTotal_5 As label:
@@ -787,8 +807,9 @@ NewInvoice As screen:
         OnSelect: =
         Text: |-
             ="$ " & Text(Value(TextInputQty_5.Text) * Value(TextInputUnitPrice_5.Text) - Value(TextInputDiscount_5.Text),"[$-en-US]#,##0.00")
-        X: =618
-        Y: =414
+        Width: =89
+        X: =644
+        Y: =588
         ZIndex: =57
 
     DropDownProductDescriptions_5 As dropdown:
@@ -796,8 +817,8 @@ NewInvoice As screen:
         Items: =ProductDescriptions
         OnSelect: =
         Width: =276
-        X: =200
-        Y: =415
+        X: =165
+        Y: =589
         ZIndex: =58
 
     TextInputQty_6 As text:
@@ -810,7 +831,7 @@ NewInvoice As screen:
             =
         Width: =49
         X: =28
-        Y: =477
+        Y: =651
         ZIndex: =59
 
     TextInputItemNumber_6 As text:
@@ -822,8 +843,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =44
-        X: =136
-        Y: =477
+        X: =101
+        Y: =651
         ZIndex: =60
 
     TextInputUnitPrice_6 As text:
@@ -834,9 +855,9 @@ NewInvoice As screen:
         HintText: ="0"
         OnChange: =
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =469
+        Width: =78
+        X: =452
+        Y: =643
         ZIndex: =61
 
     TextInputDiscount_6 As text:
@@ -845,9 +866,9 @@ NewInvoice As screen:
         Height: =26
         HintText: ="0"
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =469
+        Width: =53
+        X: =560
+        Y: =643
         ZIndex: =62
 
     LineTotal_6 As label:
@@ -855,8 +876,9 @@ NewInvoice As screen:
         OnSelect: =
         Text: |-
             ="$ " & Text(Value(TextInputQty_6.Text) * Value(TextInputUnitPrice_6.Text) - Value(TextInputDiscount_6.Text),"[$-en-US]#,##0.00")
-        X: =618
-        Y: =469
+        Width: =89
+        X: =644
+        Y: =643
         ZIndex: =63
 
     DropDownProductDescriptions_6 As dropdown:
@@ -865,8 +887,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =276
-        X: =200
-        Y: =471
+        X: =165
+        Y: =645
         ZIndex: =64
 
     TextInputQty_7 As text:
@@ -879,7 +901,7 @@ NewInvoice As screen:
             =
         Width: =49
         X: =28
-        Y: =536
+        Y: =710
         ZIndex: =65
 
     TextInputItemNumber_7 As text:
@@ -891,8 +913,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =44
-        X: =135
-        Y: =536
+        X: =100
+        Y: =710
         ZIndex: =66
 
     TextInputUnitPrice_7 As text:
@@ -903,9 +925,9 @@ NewInvoice As screen:
         HintText: ="0"
         OnChange: =
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =536
+        Width: =78
+        X: =452
+        Y: =710
         ZIndex: =67
 
     TextInputDiscount_7 As text:
@@ -914,9 +936,9 @@ NewInvoice As screen:
         Height: =26
         HintText: ="0"
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =536
+        Width: =53
+        X: =560
+        Y: =710
         ZIndex: =68
 
     LineTotal_7 As label:
@@ -924,8 +946,9 @@ NewInvoice As screen:
         OnSelect: =
         Text: |-
             ="$ " & Text(Value(TextInputQty_7.Text) * Value(TextInputUnitPrice_7.Text) - Value(TextInputDiscount_7.Text),"[$-en-US]#,##0.00")
-        X: =618
-        Y: =536
+        Width: =89
+        X: =644
+        Y: =710
         ZIndex: =69
 
     DropDownProductDescriptions_7 As dropdown:
@@ -934,8 +957,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =276
-        X: =200
-        Y: =538
+        X: =165
+        Y: =712
         ZIndex: =70
 
     TextInputQty_8 As text:
@@ -948,7 +971,7 @@ NewInvoice As screen:
             =
         Width: =49
         X: =28
-        Y: =585
+        Y: =759
         ZIndex: =71
 
     TextInputItemNumber_8 As text:
@@ -960,8 +983,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =44
-        X: =135
-        Y: =585
+        X: =100
+        Y: =759
         ZIndex: =72
 
     TextInputUnitPrice_8 As text:
@@ -972,9 +995,9 @@ NewInvoice As screen:
         HintText: ="0"
         OnChange: =
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =585
+        Width: =78
+        X: =452
+        Y: =759
         ZIndex: =73
 
     TextInputDiscount_8 As text:
@@ -983,9 +1006,9 @@ NewInvoice As screen:
         Height: =26
         HintText: ="0"
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =585
+        Width: =53
+        X: =560
+        Y: =759
         ZIndex: =74
 
     LineTotal_8 As label:
@@ -993,8 +1016,9 @@ NewInvoice As screen:
         OnSelect: =
         Text: |-
             ="$ " & Text(Value(TextInputQty_8.Text) * Value(TextInputUnitPrice_8.Text) - Value(TextInputDiscount_8.Text),"[$-en-US]#,##0.00")
-        X: =618
-        Y: =585
+        Width: =76
+        X: =644
+        Y: =759
         ZIndex: =75
 
     DropDownProductDescriptions_8 As dropdown:
@@ -1003,8 +1027,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =276
-        X: =200
-        Y: =587
+        X: =165
+        Y: =761
         ZIndex: =76
 
     TextInputQty_9 As text:
@@ -1017,7 +1041,7 @@ NewInvoice As screen:
             =
         Width: =49
         X: =28
-        Y: =642
+        Y: =816
         ZIndex: =77
 
     TextInputItemNumber_9 As text:
@@ -1029,8 +1053,8 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =44
-        X: =135
-        Y: =642
+        X: =100
+        Y: =816
         ZIndex: =78
 
     TextInputUnitPrice_9 As text:
@@ -1041,9 +1065,9 @@ NewInvoice As screen:
         HintText: ="0"
         OnChange: =
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =642
+        Width: =78
+        X: =452
+        Y: =816
         ZIndex: =79
 
     TextInputDiscount_9 As text:
@@ -1052,19 +1076,19 @@ NewInvoice As screen:
         Height: =26
         HintText: ="0"
         OnSelect: =
-        Width: =120
-        X: =648
-        Y: =642
+        Width: =53
+        X: =560
+        Y: =816
         ZIndex: =80
 
     LineTotal_9 As label:
-        Height: =26
+        Height: =29
         OnSelect: =
         Text: |-
             ="$ " & Text(Value(TextInputQty_9.Text) * Value(TextInputUnitPrice_9.Text) - Value(TextInputDiscount_9.Text),"[$-en-US]#,##0.00")
-        Width: =90
-        X: =678
-        Y: =642
+        Width: =76
+        X: =647
+        Y: =818
         ZIndex: =81
 
     DropDownProductDescriptions_9 As dropdown:
@@ -1073,49 +1097,86 @@ NewInvoice As screen:
         OnSelect: |
             =
         Width: =276
-        X: =200
-        Y: =644
+        X: =165
+        Y: =818
         ZIndex: =82
 
     Label2_13 As label:
         Text: ="Delivery Date"
         Width: =115
-        X: =653
-        Y: =132
+        X: =495
+        Y: =304
         ZIndex: =83
 
     DeliveryDate As datepicker:
         Width: =166
-        X: =602
-        Y: =132
+        X: =580
+        Y: =307
         ZIndex: =84
 
-    TextInput1 As text:
-        Default: =
-        Visible: =!IsBlank(ClientEmail.SearchText) && IsEmpty(ClientEmail.SelectedItems)
-        Width: =160
-        X: =32
-        Y: =10
-        ZIndex: =86
-
-    ClientNameComboBox As combobox:
+    ComboBoxClientName As combobox:
         DisplayFields: =["ClientName"]
+        InputTextPlaceholder: ="Find client"
         Items: =Clients
+        OnSelect: |
+            =Set(currentClient, ComboBoxClientName.Selected.ClientName)
         SearchFields: =["ClientName"]
-        SearchItems: =Search(Clients,ClientNameComboBox.SearchText,"ClientName")
+        SearchItems: =Search(Clients,ComboBoxClientName.SearchText,"ClientName")
+        SelectMultiple: =false
         Width: =242
         X: =107
         Y: =80
         ZIndex: =87
 
-    ClientEmail As combobox:
+    ComboBoxClientEmail As combobox:
         DisplayFields: =["ClientEmail"]
-        IsSearchable: =false
-        Items: =Filter(Clients, ClientName = ClientName.Selected.Result).ClientEmail
+        InputTextPlaceholder: ="Find email"
+        Items: |
+            =Clients
+        OnSelect: |
+            =Set(currentClientEmail, ComboBoxClientEmail.Selected.ClientEmail)
         SearchFields: =["ClientEmail"]
-        SearchItems: =[]
+        SearchItems: |-
+            =Search(Clients
+            ,ComboBoxClientEmail.SearchText,"ClientEmail")
+        SelectMultiple: =false
         Width: =242
-        X: =374
-        Y: =80
+        X: =108
+        Y: =138
         ZIndex: =88
+
+    Label2_14 As label:
+        Text: ="Email"
+        VerticalAlign: =VerticalAlign.Top
+        Width: =87
+        X: =14
+        Y: =138
+        ZIndex: =89
+
+    ClientEmailLabel As label:
+        Height: =38
+        Text: =ComboBoxClientEmail.Selected.ClientEmail
+        Width: =205
+        X: =306
+        Y: =200
+        ZIndex: =90
+
+    Label2_15 As label:
+        Text: =ComboBoxClientEmail.SearchText
+        Width: =115
+        X: =514
+        Y: =200
+        ZIndex: =91
+
+    Label18_1 As label:
+        Text: =ComboBoxClientName.SearchText
+        X: =101
+        Y: =216
+        ZIndex: =92
+
+    Label18_2 As label:
+        Text: =ComboBoxClientName.Selected.ClientName
+        X: =316
+        Y: =251
+        ZIndex: =93
 
