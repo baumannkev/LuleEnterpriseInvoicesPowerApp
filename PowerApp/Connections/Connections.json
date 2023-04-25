@@ -26,6 +26,9 @@
           "PaymentMethods": {
             "tableName": "{8BA2FA45-CB22-440F-B04E-4829A61B8CD4}"
           },
+          "PicturesTable": {
+            "tableName": "{9661D550-201F-4E7B-B420-FC30ED605CC0}"
+          },
           "ProductDescriptions": {
             "tableName": "{E8B78D76-9545-4BF6-8608-E3E0A746EE13}"
           }
@@ -38,11 +41,26 @@
       "ProductDescriptions",
       "EmpanadasProductDescriptions",
       "Clients",
-      "InvoicesTable"
+      "InvoicesTable",
+      "PicturesTable"
     ],
     "dependencies": {},
     "dependents": [],
     "id": "175cf8cd-2cae-4932-a9fa-a1aed644d8a7"
+  },
+  "1b31f991-0bf0-403d-9764-0f2131d25d53": {
+    "connectionRef": {
+      "displayName": "OneDrive for Business",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1546/1.0.1546.2665/onedriveforbusiness/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_onedriveforbusiness"
+    },
+    "datasets": {},
+    "dataSources": [],
+    "dependencies": {},
+    "dependents": [
+      "cc7e4c00-c843-4358-8603-9a5247d1d6aa"
+    ],
+    "id": "1b31f991-0bf0-403d-9764-0f2131d25d53"
   },
   "327b96e7-9e5d-4115-a075-4b10bf136145": {
     "connectionRef": {
@@ -69,40 +87,6 @@
     "dependents": [],
     "id": "327b96e7-9e5d-4115-a075-4b10bf136145"
   },
-  "47e31dd6-7240-4056-9b3d-a2cb96202406": {
-    "connectionRef": {
-      "displayName": "Logic flows",
-      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1615/1.0.1615.3163/logicflows/icon.png",
-      "id": "/providers/microsoft.powerapps/apis/shared_logicflows",
-      "parameterHints": {
-        "76a0bef7-851d-4a1a-96c3-3bef4612f0c6": {
-          "value": "shared_onedriveforbusiness"
-        },
-        "workflowEntityId": {},
-        "workflowName": {
-          "value": "1e10405a-9e49-4675-b049-db3b031f42b9"
-        }
-      },
-      "parameterHintsV2": {
-        "shared_onedriveforbusiness": {
-          "value": "76a0bef7-851d-4a1a-96c3-3bef4612f0c6"
-        },
-        "workflowEntityId": {},
-        "workflowName": {
-          "value": "1e10405a-9e49-4675-b049-db3b031f42b9"
-        }
-      }
-    },
-    "datasets": {},
-    "dataSources": [
-      "PowerAppV2->Createfile"
-    ],
-    "dependencies": {
-      "shared_onedriveforbusiness": "76a0bef7-851d-4a1a-96c3-3bef4612f0c6"
-    },
-    "dependents": [],
-    "id": "47e31dd6-7240-4056-9b3d-a2cb96202406"
-  },
   "493a8501-72e5-40d6-9e86-18299f850faa": {
     "connectionRef": {
       "apiTier": "Standard",
@@ -127,20 +111,6 @@
     "dependencies": {},
     "dependents": [],
     "id": "493a8501-72e5-40d6-9e86-18299f850faa"
-  },
-  "76a0bef7-851d-4a1a-96c3-3bef4612f0c6": {
-    "connectionRef": {
-      "displayName": "OneDrive for Business",
-      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1546/1.0.1546.2665/onedriveforbusiness/icon.png",
-      "id": "/providers/microsoft.powerapps/apis/shared_onedriveforbusiness"
-    },
-    "datasets": {},
-    "dataSources": [],
-    "dependencies": {},
-    "dependents": [
-      "47e31dd6-7240-4056-9b3d-a2cb96202406"
-    ],
-    "id": "76a0bef7-851d-4a1a-96c3-3bef4612f0c6"
   },
   "8977320f-388e-4f25-93fd-a4bce9f09450": {
     "connectionRef": {
@@ -200,5 +170,39 @@
     "dependencies": {},
     "dependents": [],
     "id": "b699478e-737c-4988-af32-105b64caf3cf"
+  },
+  "cc7e4c00-c843-4358-8603-9a5247d1d6aa": {
+    "connectionRef": {
+      "displayName": "Logic flows",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1615/1.0.1615.3163/logicflows/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_logicflows",
+      "parameterHints": {
+        "1b31f991-0bf0-403d-9764-0f2131d25d53": {
+          "value": "shared_onedriveforbusiness"
+        },
+        "workflowEntityId": {},
+        "workflowName": {
+          "value": "1e10405a-9e49-4675-b049-db3b031f42b9"
+        }
+      },
+      "parameterHintsV2": {
+        "shared_onedriveforbusiness": {
+          "value": "1b31f991-0bf0-403d-9764-0f2131d25d53"
+        },
+        "workflowEntityId": {},
+        "workflowName": {
+          "value": "1e10405a-9e49-4675-b049-db3b031f42b9"
+        }
+      }
+    },
+    "datasets": {},
+    "dataSources": [
+      "UploadPhoto"
+    ],
+    "dependencies": {
+      "shared_onedriveforbusiness": "1b31f991-0bf0-403d-9764-0f2131d25d53"
+    },
+    "dependents": [],
+    "id": "cc7e4c00-c843-4358-8603-9a5247d1d6aa"
   }
 }

@@ -2,7 +2,7 @@
   {
     "ApiId": "/providers/microsoft.powerapps/apis/shared_logicflows",
     "FlowNameId": "1e10405a-9e49-4675-b049-db3b031f42b9",
-    "Name": "PowerAppV2->Createfile",
+    "Name": "UploadPhoto",
     "ServiceKind": "ConnectedWadl",
     "Type": "ServiceInfo",
     "WorkflowEntityId": null

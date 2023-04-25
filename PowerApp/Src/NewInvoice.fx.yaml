@@ -285,56 +285,86 @@ NewInvoice As screen:
         OnSelect: |-
             =If(
                 Or(
-                    And(IsBlank(currentClientEmail),
-                    IsBlank(currentClient),
-                    IsBlank(ComboBoxClientName.SearchText),
-                    IsBlank(ComboBoxClientEmail.SearchText)),
+                    And(
+                        IsBlank(currentClientEmail),
+                        IsBlank(currentClient),
+                        IsBlank(ComboBoxClientName.SearchText),
+                        IsBlank(ComboBoxClientEmail.SearchText)
+                    ),
                     IsEmpty(ProductItemsCollection)
                 ),
-                Notify("Please fill in all required fields.", NotificationType.Error),
-            If(
-                IsBlank(LookUp(Clients, ClientName = ComboBoxClientName.SearchText)),
+                Notify(
+                    "Please fill in all required fields.",
+                    NotificationType.Error
+                ),
                 If(
-                    !IsBlank(ComboBoxClientName.SearchText) And !IsBlank(ComboBoxClientEmail.SearchText),
+                    IsBlank(
+                        LookUp(
+                            Clients,
+                            ClientName = ComboBoxClientName.SearchText
+                        )
+                    ),
+                    If(
+                        !IsBlank(ComboBoxClientName.SearchText) And !IsBlank(ComboBoxClientEmail.SearchText),
+                        Patch(
+                            Clients,
+                            Defaults(Clients),
+                            {
+                                ClientName: ComboBoxClientName.SearchText,
+                                ClientEmail: ComboBoxClientEmail.SearchText
+                            }
+                        )
+                    )
+                );
+                Patch(
+                    LuleEnterprisesInvoices,
+                    Defaults(LuleEnterprisesInvoices),
+                    {
+                        Title: InvoiceNumber.Text,
+                        InvoiceNumber: InvoiceNumber.Text,
+                        InvoiceDate: InvoiceDate.SelectedDate,
+                        ClientName: If(
+                            IsBlank(currentClient),
+                            ComboBoxClientName.SearchText,
+                            currentClient
+                        ),
+                        ClientEmail: If(
+                            IsBlank(currentClientEmail),
+                            ComboBoxClientEmail.SearchText,
+                            currentClientEmail
+                        ),
+                        PaymentMethod: PaymentMethod.Selected.'Payment Methods',
+                        InvoiceDueDate: InvoiceDueDate.SelectedDate,
+                        TotalPrice: TotalPrice.Text,
+                        DeliveryDate: DeliveryDate.SelectedDate
+                    }
+                );
+                ForAll(
+                    ProductItemsCollection,
                     Patch(
-                        Clients,
-                        Defaults(Clients),
+                        ProductInvoicesList,
+                        Defaults(ProductInvoicesList),
                         {
-                            ClientName: ComboBoxClientName.SearchText,
-                            ClientEmail: ComboBoxClientEmail.SearchText
+                            Title: InvoiceNumber.Text,
+                            Qty: ProductItemsCollection[@Qty],
+                            ItemNumber: ProductItemsCollection[@ItemNumber],
+                            Description: ProductItemsCollection[@Description],
+                            UnitPrice: ProductItemsCollection[@UnitPrice],
+                            Discount: ProductItemsCollection[@Discount],
+                            LineTotal: ProductItemsCollection[@LineTotal]
                         }
                     )
-                )
-            );
-            
-            Patch(
-              LuleEnterprisesInvoices,
-              Defaults(LuleEnterprisesInvoices),
-              {
-                Title: InvoiceNumber.Text,
-                InvoiceNumber: InvoiceNumber.Text,
-                InvoiceDate: InvoiceDate.SelectedDate, 
-                ClientName: If(IsBlank(currentClient), ComboBoxClientName.SearchText, currentClient),
-            ClientEmail: If(IsBlank(currentClientEmail), ComboBoxClientEmail.SearchText, currentClientEmail)
-            ,PaymentMethod: PaymentMethod.Selected.'Payment Methods',InvoiceDueDate: InvoiceDueDate.SelectedDate,
-                TotalPrice: TotalPrice.Text,
-                DeliveryDate: DeliveryDate.SelectedDate
-            
-              }
-            );
-            
-            ForAll(ProductItemsCollection,    
-            Patch(ProductInvoicesList,
-                 Defaults(ProductInvoicesList),      { 
-                Title: InvoiceNumber.Text,
-                  Qty: ProductItemsCollection[@Qty],
-                  ItemNumber: ProductItemsCollection[@ItemNumber],
-                  Description: ProductItemsCollection[@Description],
-                UnitPrice: ProductItemsCollection[@UnitPrice],
-                  Discount: ProductItemsCollection[@Discount],
-                  LineTotal: ProductItemsCollection[@LineTotal]
-                     }));
-            Navigate(SuccessScreen);
+                );
+                UploadPhoto.Run(
+                    {
+                        file: {
+                            contentBytes: First(DataCardValue12.Attachments).Value,
+                            name: "Invoice" & Text(InvoiceNumber.Text)
+                        }
+                    }
+                );
+                Navigate(SuccessScreen);
+                
             )
         Text: ="Send Invoice"
         Width: =193
@@ -1245,7 +1275,6 @@ NewInvoice As screen:
             Height: =116
             Image: =If(IsBlank(AddMediaButton.Media), SampleImage, AddMediaButton.Media)
             ImagePosition: =ImagePosition.Fill
-            Visible: =false
             Width: =295
             X: =AddMediaButton.X
             Y: =AddMediaButton.Y
@@ -1254,7 +1283,6 @@ NewInvoice As screen:
         AddMediaButton As addMedia:
             Height: =116
             Size: =25
-            Visible: =false
             Width: =295
             X: =28
             Y: =1099
@@ -1278,4 +1306,77 @@ NewInvoice As screen:
         X: =287
         Y: =890
         ZIndex: =102
+
+    Form1 As form:
+        DataSource: =LuleEnterprisesInvoices
+        Height: =164
+        Width: =248
+        X: =58
+        Y: =1163
+        ZIndex: =103
+
+        AttachmentsCard As typedDataCard.attachmentsEditCard:
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="{Attachments}"
+            Default: =ThisItem.Attachments
+            DisplayMode: =Parent.DisplayMode
+            DisplayName: =DataSourceInfo([@LuleEnterprisesInvoices],DataSourceInfo.DisplayName,"{Attachments}")
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =DataCardValue12.Attachments
+            Width: =248
+            X: =0
+            Y: =0
+            ZIndex: =104
+
+            DataCardKey12 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                Wrap: =false
+                X: =30
+                Y: =10
+                ZIndex: =1
+
+            DataCardValue12 As attachments:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DisplayMode: =Parent.DisplayMode
+                IsInDataCard: =true
+                Items: =Parent.Default
+                PaddingBottom: =5
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                PaddingRight: =5
+                PaddingTop: =5
+                Tooltip: =Parent.DisplayName
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardKey12.Y + DataCardKey12.Height + 5
+                ZIndex: =2
+
+            ErrorMessage12 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue12.Y + DataCardValue12.Height
+                ZIndex: =3
+
+            StarVisible12 As label:
+                Align: =Align.Center
+                Height: =DataCardKey12.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey12.Y
+                ZIndex: =4
 
