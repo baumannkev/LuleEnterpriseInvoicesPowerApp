@@ -285,8 +285,10 @@ NewInvoice As screen:
         OnSelect: |-
             =If(
                 Or(
-                    IsBlank(currentClientEmail),
+                    And(IsBlank(currentClientEmail),
                     IsBlank(currentClient),
+                    IsBlank(ComboBoxClientName.SearchText),
+                    IsBlank(ComboBoxClientEmail.SearchText)),
                     IsEmpty(ProductItemsCollection)
                 ),
                 Notify("Please fill in all required fields.", NotificationType.Error),
@@ -1185,6 +1187,7 @@ NewInvoice As screen:
 
     Label2_15 As label:
         Text: =ComboBoxClientEmail.SearchText
+        Visible: =false
         Width: =115
         X: =306
         Y: =251
@@ -1192,6 +1195,7 @@ NewInvoice As screen:
 
     Label18_1 As label:
         Text: =ComboBoxClientName.SearchText
+        Visible: =false
         X: =101
         Y: =216
         ZIndex: =92
