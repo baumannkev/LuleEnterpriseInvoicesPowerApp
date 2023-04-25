@@ -217,22 +217,22 @@ NewInvoice As screen:
         ZIndex: =17
 
     Label5_6 As label:
-        Text: ="Total Discount $"
-        X: =322
-        Y: =1016
+        Text: ="Total Discount "
+        X: =425
+        Y: =1041
         ZIndex: =18
 
     Label5_7 As label:
         Text: ="Subtotal Sales Tax"
         Width: =162
-        X: =526
-        Y: =1016
+        X: =421
+        Y: =1099
         ZIndex: =19
 
     Label5_8 As label:
         Text: ="Total"
-        X: =532
-        Y: =1079
+        X: =534
+        Y: =1146
         ZIndex: =20
 
     Label2_11 As label:
@@ -261,27 +261,36 @@ NewInvoice As screen:
         ZIndex: =24
 
     TotalDiscount As label:
-        Text: =Sum(ProductItems, TextInputDiscount)
+        Height: =43
+        Text: |-
+            ="$ " & Text(Sum(TextInputDiscount,TextInputDiscount_2, TextInputDiscount_3, TextInputDiscount_5, TextInputDiscount_6, TextInputDiscount_7, TextInputDiscount_8,TextInputDiscount_9),"[$-en-US]#,##0.00")
         Tooltip: =
-        Width: =47
-        X: =464
-        Y: =933
+        Width: =69
+        X: =583
+        Y: =1037
         ZIndex: =25
 
     TotalSubTotalSalesTax As label:
         Text: |-
-            ="$ " & Text(Sum(LineTotal_1,LineTotal_2, LineTotal_3),"[$-en-US]#,##0.00")
+            ="$ " & Text(Sum(LineTotal_1,LineTotal_2, LineTotal_3, LineTotal_5, LineTotal_6, LineTotal_7, LineTotal_8, LineTotal_9),"[$-en-US]#,##0.00")
         Tooltip: |-
             ="$ " & Text(Sum(ProductItems, LineTotal),"[$-en-US]#,##0.00")
         Width: =102
-        X: =580
-        Y: =1077
+        X: =582
+        Y: =1144
         ZIndex: =27
 
     SendInvoiceButton As button:
         Height: =56
         OnSelect: |-
             =If(
+                Or(
+                    IsBlank(currentClientEmail),
+                    IsBlank(currentClient),
+                    IsEmpty(ProductItemsCollection)
+                ),
+                Notify("Please fill in all required fields.", NotificationType.Error),
+            If(
                 IsBlank(LookUp(Clients, ClientName = ComboBoxClientName.SearchText)),
                 If(
                     !IsBlank(ComboBoxClientName.SearchText) And !IsBlank(ComboBoxClientEmail.SearchText),
@@ -323,10 +332,8 @@ NewInvoice As screen:
                   Discount: ProductItemsCollection[@Discount],
                   LineTotal: ProductItemsCollection[@LineTotal]
                      }));
-            
-            
-            
             Navigate(SuccessScreen);
+            )
         Text: ="Send Invoice"
         Width: =193
         X: =555
@@ -380,8 +387,8 @@ NewInvoice As screen:
         HintText: ="0"
         OnChange: =
         OnSelect: =
-        Width: =83
-        X: =457
+        Width: =78
+        X: =452
         Y: =418
         ZIndex: =34
 
@@ -555,7 +562,7 @@ NewInvoice As screen:
         Y: =543
         ZIndex: =49
 
-    Button4_1 As button:
+    CalculateTotalButton As button:
         Height: =49
         OnSelect: |-
             =Collect(
@@ -659,6 +666,8 @@ NewInvoice As screen:
             );
             
             If(IsEmpty(ProductItemsCollection), UpdateContext({ShowWarningLabel: true}), UpdateContext({ShowWarningLabel: false}));
+            
+            If(IsEmpty(ProductItemsCollection), UpdateContext({ShowWarningLabel: true}), UpdateContext({ShowWarningLabel: false}));
         Size: =10
         Text: |-
             ="Calculate Total
@@ -752,12 +761,12 @@ NewInvoice As screen:
 
     TotalPrice As label:
         Text: |-
-            ="$ " & Text(Sum(LineTotal_1,LineTotal_2, LineTotal_3),"[$-en-US]#,##0.00")
+            ="$ " & Text(Sum(LineTotal_1,LineTotal_2, LineTotal_3, LineTotal_5, LineTotal_6, LineTotal_7, LineTotal_8, LineTotal_9),"[$-en-US]#,##0.00")
         Tooltip: |-
             ="$ " & Text(Sum(ProductItems, LineTotal),"[$-en-US]#,##0.00")
-        Width: =76
-        X: =688
-        Y: =1016
+        Width: =101
+        X: =583
+        Y: =1099
         ZIndex: =52
 
     TextInputQty_5 As text:
@@ -1168,6 +1177,7 @@ NewInvoice As screen:
     ClientEmailLabel As label:
         Height: =38
         Text: =ComboBoxClientEmail.Selected.ClientEmail
+        Visible: =false
         Width: =205
         X: =306
         Y: =200
@@ -1188,28 +1198,36 @@ NewInvoice As screen:
 
     Label18_2 As label:
         Text: =ComboBoxClientName.Selected.ClientName
+        Visible: =false
         X: =98
         Y: =180
         ZIndex: =93
 
     Label18_3 As label:
         Text: =currentClient
+        Visible: =false
         X: =101
         Y: =252
         ZIndex: =94
 
     Label2_16 As label:
         Text: =currentClientEmail
+        Visible: =false
         Width: =115
         X: =514
         Y: =238
         ZIndex: =95
 
     TotalCalculatedLabel As label:
+        Color: =RGBA(39, 113, 194, 1)
+        FontWeight: =FontWeight.Bold
+        Height: =45
+        Size: =15
         Text: ="Total Calculated!"
         Visible: =!IsEmpty(ProductItemsCollection)
-        X: =302
-        Y: =939
+        Width: =183
+        X: =292
+        Y: =929
         ZIndex: =96
 
     AddMediaWithImage As group:
@@ -1223,6 +1241,7 @@ NewInvoice As screen:
             Height: =116
             Image: =If(IsBlank(AddMediaButton.Media), SampleImage, AddMediaButton.Media)
             ImagePosition: =ImagePosition.Fill
+            Visible: =false
             Width: =295
             X: =AddMediaButton.X
             Y: =AddMediaButton.Y
@@ -1231,6 +1250,7 @@ NewInvoice As screen:
         AddMediaButton As addMedia:
             Height: =116
             Size: =25
+            Visible: =false
             Width: =295
             X: =28
             Y: =1099
@@ -1238,7 +1258,20 @@ NewInvoice As screen:
 
     Button3 As button:
         Text: ="Button"
+        Visible: =false
         X: =55
         Y: =1275
         ZIndex: =101
+
+    WarningLabel As label:
+        Color: =RGBA(255, 0, 0, 1)
+        FontWeight: =FontWeight.Bold
+        Height: =45
+        Size: =15
+        Text: ="Empty Items!"
+        Visible: =IsEmpty(ProductItemsCollection)
+        Width: =183
+        X: =287
+        Y: =890
+        ZIndex: =102
 
