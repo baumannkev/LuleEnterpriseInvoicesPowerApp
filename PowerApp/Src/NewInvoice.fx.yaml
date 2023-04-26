@@ -336,7 +336,8 @@ NewInvoice As screen:
                         PaymentMethod: PaymentMethod.Selected.'Payment Methods',
                         InvoiceDueDate: InvoiceDueDate.SelectedDate,
                         TotalPrice: TotalPrice.Text,
-                        DeliveryDate: DeliveryDate.SelectedDate
+                        DeliveryDate: DeliveryDate.SelectedDate,
+                        Attachments: DataCardValue12
                     }
                 );
                 ForAll(
@@ -1309,6 +1310,7 @@ NewInvoice As screen:
 
     Form1 As form:
         DataSource: =LuleEnterprisesInvoices
+        DefaultMode: =FormMode.New
         Height: =164
         Width: =248
         X: =58
