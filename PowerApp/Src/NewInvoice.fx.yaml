@@ -337,7 +337,8 @@ NewInvoice As screen:
                         InvoiceDueDate: InvoiceDueDate.SelectedDate,
                         TotalPrice: TotalPrice.Text,
                         DeliveryDate: DeliveryDate.SelectedDate,
-                        UploadedImage: UploadedImg.Image
+                        UploadedImage: UploadedImg.Image,
+                        Attachments: DataCardValue12
                     }
                 );
                 ForAll(
