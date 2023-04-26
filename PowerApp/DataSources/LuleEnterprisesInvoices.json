@@ -40,7 +40,8 @@
       "OData__ColorTag": "Color Tag",
       "PaymentMethod": "PaymentMethod",
       "Title": "Title",
-      "TotalPrice": "TotalPrice"
+      "TotalPrice": "TotalPrice",
+      "UploadedImage": "UploadedImage"
     },
     "DatasetName": "https://baunh.sharepoint.com/sites/BaumannAssoc",
     "EncodeDataset": true,

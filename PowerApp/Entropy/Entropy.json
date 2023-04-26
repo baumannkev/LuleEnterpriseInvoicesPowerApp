@@ -135,12 +135,12 @@
     "TotalDiscount": 117,
     "TotalPrice": 123,
     "TotalSubTotalSalesTax": 124,
-    "UploadedImage": 126,
+    "UploadedImg": 126,
     "WarningLabel": 130
   },
   "FunctionParamsInvariantScripts": {},
   "FunctionParamsInvariantScriptsOnInstances": {},
-  "HeaderLastSavedDateTimeUTC": "04/26/2023 00:05:48",
+  "HeaderLastSavedDateTimeUTC": "04/26/2023 00:12:48",
   "IsLegacyComponentAllowGlobalScopeCase": false,
   "LocalConnectionIDReferences": {
     "175cf8cd-2cae-4932-a9fa-a1aed644d8a7": "\"/providers/microsoft.powerapps/apis/shared_excelonlinebusiness/connections/d56617a734084fe8946e4977aa6e9b06\"",
@@ -182,7 +182,7 @@
   "OrderGroupControls": {
     "AddMediaWithImage": {
       "AddMediaButton": 1,
-      "UploadedImage": 0
+      "UploadedImg": 0
     }
   },
   "OrderPcfTemplate": {},
@@ -337,14 +337,14 @@
     "TotalDiscount": {},
     "TotalPrice": {},
     "TotalSubTotalSalesTax": {},
-    "UploadedImage": {},
+    "UploadedImg": {},
     "WarningLabel": {}
   },
   "PCFDynamicSchemaForIRRetrievalEntry": {},
   "PCFTemplateEntry": {},
   "PublishOrderIndices": {
     "AddMediaButton": 103,
-    "AddMediaWithImage": 101,
+    "AddMediaWithImage": 102,
     "App": 0,
     "AttachmentsCard": 109,
     "Button2": 129,
@@ -476,7 +476,7 @@
     "TotalDiscount": 99,
     "TotalPrice": 105,
     "TotalSubTotalSalesTax": 106,
-    "UploadedImage": 102,
+    "UploadedImg": 101,
     "WarningLabel": 95
   },
   "ResourcesJsonIndices": {

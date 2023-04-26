@@ -337,7 +337,7 @@ NewInvoice As screen:
                         InvoiceDueDate: InvoiceDueDate.SelectedDate,
                         TotalPrice: TotalPrice.Text,
                         DeliveryDate: DeliveryDate.SelectedDate,
-                        Attachments: DataCardValue12
+                        UploadedImage: UploadedImg.Image
                     }
                 );
                 ForAll(
@@ -356,14 +356,7 @@ NewInvoice As screen:
                         }
                     )
                 );
-                UploadPhoto.Run(
-                    {
-                        file: {
-                            contentBytes: First(DataCardValue12.Attachments).Value,
-                            name: "Invoice" & Text(InvoiceNumber.Text)
-                        }
-                    }
-                );
+                
                 Navigate(SuccessScreen);
                 
             )
@@ -1272,7 +1265,7 @@ NewInvoice As screen:
         Y: =40
         ZIndex: =98
 
-        UploadedImage As image:
+        UploadedImg As image:
             Height: =116
             Image: =If(IsBlank(AddMediaButton.Media), SampleImage, AddMediaButton.Media)
             ImagePosition: =ImagePosition.Fill
@@ -1313,8 +1306,8 @@ NewInvoice As screen:
         DefaultMode: =FormMode.New
         Height: =164
         Width: =248
-        X: =58
-        Y: =1163
+        X: =272
+        Y: =1202
         ZIndex: =103
 
         AttachmentsCard As typedDataCard.attachmentsEditCard:
