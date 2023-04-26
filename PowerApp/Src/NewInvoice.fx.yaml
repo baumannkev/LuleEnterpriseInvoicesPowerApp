@@ -337,8 +337,7 @@ NewInvoice As screen:
                         InvoiceDueDate: InvoiceDueDate.SelectedDate,
                         TotalPrice: TotalPrice.Text,
                         DeliveryDate: DeliveryDate.SelectedDate,
-                        UploadedImage: UploadedImg.Image,
-                        Attachments: DataCardValue12
+                        UploadedImage: UploadedImg.Image
                     }
                 );
                 ForAll(
@@ -1280,7 +1279,7 @@ NewInvoice As screen:
             Size: =25
             Width: =295
             X: =28
-            Y: =1099
+            Y: =1184
             ZIndex: =100
 
     Button3 As button:
@@ -1301,78 +1300,4 @@ NewInvoice As screen:
         X: =287
         Y: =890
         ZIndex: =102
-
-    Form1 As form:
-        DataSource: =LuleEnterprisesInvoices
-        DefaultMode: =FormMode.New
-        Height: =164
-        Width: =248
-        X: =272
-        Y: =1202
-        ZIndex: =103
-
-        AttachmentsCard As typedDataCard.attachmentsEditCard:
-            BorderStyle: =BorderStyle.Solid
-            DataField: ="{Attachments}"
-            Default: =ThisItem.Attachments
-            DisplayMode: =Parent.DisplayMode
-            DisplayName: =DataSourceInfo([@LuleEnterprisesInvoices],DataSourceInfo.DisplayName,"{Attachments}")
-            Fill: =RGBA(0, 0, 0, 0)
-            Height: =50
-            Required: =false
-            Update: =DataCardValue12.Attachments
-            Width: =248
-            X: =0
-            Y: =0
-            ZIndex: =104
-
-            DataCardKey12 As label:
-                AutoHeight: =true
-                Height: =34
-                Text: =Parent.DisplayName
-                Width: =Parent.Width - 60
-                Wrap: =false
-                X: =30
-                Y: =10
-                ZIndex: =1
-
-            DataCardValue12 As attachments:
-                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
-                DisplayMode: =Parent.DisplayMode
-                IsInDataCard: =true
-                Items: =Parent.Default
-                PaddingBottom: =5
-                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
-                PaddingRight: =5
-                PaddingTop: =5
-                Tooltip: =Parent.DisplayName
-                Width: =Parent.Width - 60
-                X: =30
-                Y: =DataCardKey12.Y + DataCardKey12.Height + 5
-                ZIndex: =2
-
-            ErrorMessage12 As label:
-                AutoHeight: =true
-                Height: =10
-                Live: =Live.Assertive
-                PaddingBottom: =0
-                PaddingLeft: =0
-                PaddingRight: =0
-                PaddingTop: =0
-                Text: =Parent.Error
-                Visible: =Parent.DisplayMode=DisplayMode.Edit
-                Width: =Parent.Width - 60
-                X: =30
-                Y: =DataCardValue12.Y + DataCardValue12.Height
-                ZIndex: =3
-
-            StarVisible12 As label:
-                Align: =Align.Center
-                Height: =DataCardKey12.Height
-                Text: ="*"
-                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
-                Width: =30
-                Wrap: =false
-                Y: =DataCardKey12.Y
-                ZIndex: =4
 

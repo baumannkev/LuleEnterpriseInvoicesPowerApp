@@ -2054,36 +2054,6 @@
             {
               "logicalLocations": [
                 {
-                  "fullyQualifiedName": "NewInvoice.Form1.AttachmentsCard.DataCardValue12.AccessibleLabel"
-                }
-              ],
-              "physicalLocation": {
-                "address": {
-                  "fullyQualifiedName": "NewInvoice.Form1.AttachmentsCard.DataCardValue12.AccessibleLabel",
-                  "relativeAddress": 0
-                }
-              },
-              "properties": {
-                "member": "AccessibleLabel",
-                "module": "NewInvoice",
-                "type": "NewInvoice.Form1.AttachmentsCard.DataCardValue12"
-              }
-            }
-          ],
-          "message": {
-            "id": "issue"
-          },
-          "properties": {
-            "level": "Medium"
-          },
-          "ruleId": "acc-AccessibleLabelNeeded",
-          "ruleIndex": 0
-        },
-        {
-          "locations": [
-            {
-              "logicalLocations": [
-                {
                   "fullyQualifiedName": "NewInvoice.ShowWarningLabel"
                 }
               ],
