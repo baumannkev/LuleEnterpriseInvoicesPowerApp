@@ -14,10 +14,3 @@ App As appinfo:
           }
         );
 
-    Host As hostControl.DefaultHostControlVariant:
-        OnCancel: =false
-        OnEdit: =false
-        OnNew: =false
-        OnSave: =false
-        OnView: =false
-

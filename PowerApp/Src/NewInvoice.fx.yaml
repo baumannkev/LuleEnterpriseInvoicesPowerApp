@@ -337,11 +337,7 @@ NewInvoice As screen:
                         InvoiceDueDate: InvoiceDueDate.SelectedDate,
                         TotalPrice: TotalPrice.Text,
                         DeliveryDate: DeliveryDate.SelectedDate,
-                        UploadedImage: If(
-                        IsEmpty(UploadedImg.Image),
-                        lula_pastries,
-                        UploadedImg.Image
-                    )
+                        UploadedImage: UploadedImg.Image
                     }
                 );
                 ForAll(
@@ -1271,7 +1267,7 @@ NewInvoice As screen:
 
         UploadedImg As image:
             Height: =116
-            Image: =If(IsBlank(AddMediaButton.Media), lula_pastries, AddMediaButton.Media)
+            Image: =If(IsBlank(AddMediaButton.Media), SampleImage, AddMediaButton.Media)
             ImagePosition: =ImagePosition.Fill
             Width: =295
             X: =AddMediaButton.X

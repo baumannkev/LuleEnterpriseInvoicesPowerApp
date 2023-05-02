@@ -94,7 +94,6 @@
       "zeroalltabindexes": false
     },
     "Author": "",
-    "BindingErrorCount": 0,
     "ContainsThirdPartyPcfControls": false,
     "DefaultConnectedDataSourceMaxGetRowsCount": 500,
     "DocumentAppType": "DesktopOrTablet",
@@ -112,8 +111,7 @@
     "LocalDatabaseReferences": "{}",
     "ManualOfflineProfileId": "",
     "Name": "LaLula Pastries Invoice Receipt",
-    "OriginatingVersion": "1.330",
-    "ParserErrorCount": 0
+    "OriginatingVersion": "1.330"
   },
   "PublishInfo": {
     "AppName": "LaLula Pastries Invoice Receipt",
