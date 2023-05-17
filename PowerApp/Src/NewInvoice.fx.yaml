@@ -19,6 +19,7 @@ NewInvoice As screen:
 
     Label17 As label:
         Align: =Align.Center
+        Color: =RGBA(255, 255, 255, 1)
         Fill: =RGBA(0, 134, 208, 1)
         Height: =60
         Size: =30
@@ -393,6 +394,7 @@ NewInvoice As screen:
         ZIndex: =30
 
     Icon5 As icon.Home:
+        Color: =RGBA(255, 255, 255, 1)
         Height: =60
         Icon: =Icon.Home
         OnSelect: =Navigate(Invoices)
