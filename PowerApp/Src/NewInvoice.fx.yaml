@@ -1,8 +1,21 @@
 NewInvoice As screen:
     Fill: |
         =
-    OnVisible: |
-        =Clear(ProductItemsCollection);
+    OnVisible: |-
+        =Refresh(Clients);
+        Clear(ProductItemsCollection);
+        Reset(TextInputQty_1);
+        Reset(TextInputQty_2);
+        Reset(TextInputQty_3);
+        Reset(TextInputQty_5);
+        Reset(TextInputQty_6);
+        Reset(TextInputQty_7);
+        Reset(TextInputQty_8);
+        Reset(TextInputQty_9);
+        Reset(TextInputQty_9);
+        
+        Reset(ComboBoxClientEmail);
+        Reset(ComboBoxClientName);
 
     Label17 As label:
         Align: =Align.Center
@@ -1207,7 +1220,6 @@ NewInvoice As screen:
     ClientEmailLabel As label:
         Height: =38
         Text: =ComboBoxClientEmail.Selected.ClientEmail
-        Visible: =false
         Width: =205
         X: =306
         Y: =200
