@@ -1,4 +1,5 @@
 "Invoices As screen.'tabletLayout_HeaderAndGallery_ver3.0'":
+    OnVisible: =Refresh(LuleEnterprisesInvoices);
 
     RectQuickActionBar2 As rectangle:
         Height: =64
